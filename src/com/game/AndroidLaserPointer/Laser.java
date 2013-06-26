@@ -14,12 +14,14 @@ public class Laser extends ShapeDrawable {
     private int x;
     private int y;
 
+    private float oscillationPeriod;
 
     public Laser() {
         super(new OvalShape());
 
         radius = 40f;
         diameter = radius*2;
+        oscillationPeriod = (float) Math.PI/32;
         getPaint().setColor(0x88ff0000);
     }
 
@@ -58,8 +60,8 @@ public class Laser extends ShapeDrawable {
     }
 
     public void step(long deltaTimeMs) {
-        long t = System.currentTimeMillis();
-        this.r((float)(radius+3*Math.sin(t)));
+//        float t = oscillationPeriod/(deltaTimeMs*1000);
+//        this.r((float)(radius + 3*Math.sin(t)));
     }
 
     public boolean hit(int x, int y) {

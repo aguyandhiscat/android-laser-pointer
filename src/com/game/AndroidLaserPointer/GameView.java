@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 public class GameView extends View {
     private static final String TAG = "AndroidLaserPointerGame";
 
@@ -66,7 +68,7 @@ public class GameView extends View {
         mLaser = new Laser();
         MAX_X = MAX_Y = 0;
 
-        mLaser.x(mLaser.radius).y(mLaser.radius);
+        mLaser.x((int)mLaser.radius).y((int)mLaser.radius);
         update();
     }
 
@@ -76,7 +78,9 @@ public class GameView extends View {
 
     public void updatePoints(int pts) {
         mPoints += pts;
-        mPointsCounter.setText(""+mPoints);
+
+        DecimalFormat formatter = new DecimalFormat("###,###");
+        mPointsCounter.setText(""+formatter.format(mPoints));
     }
 
     public void setDependentViews(TextView pointsCounter) {
@@ -89,6 +93,8 @@ public class GameView extends View {
         long difference = now - then;
 
         then = now;
+
+        mLaser.step(difference);
 
         invalidate();
 

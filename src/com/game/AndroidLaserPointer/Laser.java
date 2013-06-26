@@ -8,8 +8,8 @@ import android.util.Log;
 public class Laser extends ShapeDrawable {
     private static final String TAG = "AndroidLaserPointerGame";
 
-    public final int radius = 40;
-    public final int diameter = 80;
+    public float radius;
+    public float diameter;
 
     private int x;
     private int y;
@@ -18,6 +18,8 @@ public class Laser extends ShapeDrawable {
     public Laser() {
         super(new OvalShape());
 
+        radius = 40f;
+        diameter = radius*2;
         getPaint().setColor(0x88ff0000);
     }
 
@@ -43,11 +45,22 @@ public class Laser extends ShapeDrawable {
         return this;
     }
 
-    public void reBounds() {
-        setBounds((int)x-radius, (int)y-radius, (int)x+radius, (int)y+radius);
+    public Laser r(float r) {
+        radius = r;
+        diameter = radius*2;
+        reBounds();
+
+        return this;
     }
 
-    public void step(long deltaTimeMs) { }
+    public void reBounds() {
+        setBounds((int)(x-radius), (int)(y-radius), (int)(x+radius), (int)(y+radius));
+    }
+
+    public void step(long deltaTimeMs) {
+        long t = System.currentTimeMillis();
+        this.r((float)(radius+3*Math.sin(t)));
+    }
 
     public boolean hit(int x, int y) {
         double dist = Math.sqrt((double) Math.pow(x-this.x, 2) + Math.pow(y-this.y, 2));

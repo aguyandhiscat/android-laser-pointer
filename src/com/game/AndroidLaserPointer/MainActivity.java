@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -22,6 +23,10 @@ public class MainActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        reset();
+    }
+
+    public void reset() {
         setContentView(R.layout.menu);
 
         Button btn = (Button) findViewById(R.id.start_button);
@@ -36,8 +41,18 @@ public class MainActivity extends Activity {
         setContentView(R.layout.game);
 
         GameView gameView = (GameView) findViewById(R.id.game);
-        gameView.setDependentViews((TextView) findViewById(R.id.points_counter));
+        gameView.setDependentViews((TextView) findViewById(R.id.points_counter),
+                (TextView) findViewById(R.id.time_counter));
 
         gameView.initNewGame();
+    }
+
+    public void endGame(int finalScore) {
+        setScoreInLeaderboard(finalScore);
+        reset();
+    }
+
+    public void setScoreInLeaderboard(int score) {
+        Toast.makeText(this, "Score: "+score, 2000).show();
     }
 }

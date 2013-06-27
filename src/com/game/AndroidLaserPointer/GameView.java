@@ -11,14 +11,21 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class GameView extends View {
     private static final String TAG = "AndroidLaserPointerGame";
+    private final int DefaultTimeMs = 8000;
+
+    private MainActivity mActivity;
 
     private Laser mLaser;
     private TextView mPointsCounter;
+    private TextView mTimeCounter;
 
     private int mPoints;
+    private Calendar mCountdownTime;
 
     private int MAX_X;
     private int MAX_Y;
@@ -79,15 +86,26 @@ public class GameView extends View {
     }
 
     private void initView(Context context) {
+        mActivity = (MainActivity) context;
         mLaser = new Laser();
         MAX_X = MAX_Y = 0;
 
-        mLaser.x((int)mLaser.radius).y((int)mLaser.radius);
+        mLaser.x((int)mLaser.radius).y((int) mLaser.radius);
         update();
     }
 
     public void initNewGame() {
+        mCountdownTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+0"));
+        mCountdownTime.clear();
+        mCountdownTime.set(Calendar.MILLISECOND, DefaultTimeMs);
+
         updatePoints(0);
+        updateTimer();
+    }
+
+    public void endGame(int finalPoints) {
+        Log.i(TAG, "End game");
+        mActivity.endGame(finalPoints);
     }
 
     public void updatePoints(int pts) {
@@ -97,8 +115,9 @@ public class GameView extends View {
         mPointsCounter.setText(""+formatter.format(mPoints));
     }
 
-    public void setDependentViews(TextView pointsCounter) {
+    public void setDependentViews(TextView pointsCounter, TextView timeCounter) {
         mPointsCounter = pointsCounter;
+        mTimeCounter = timeCounter;
     }
 
     public void update() {
@@ -116,7 +135,14 @@ public class GameView extends View {
     }
 
     public void updateTimer() {
-        mTimerHandler.sleep(1000);
+        if(mCountdownTime.getTimeInMillis() <= 0) {
+            endGame(mPoints);
+        } else {
+            mCountdownTime.add(Calendar.MILLISECOND, -1000);
+            int time = (int) mCountdownTime.getTimeInMillis()/1000;
+            mTimeCounter.setText(((time < 10) ? "0" : "") + time);
+            mTimerHandler.sleep(1000);
+        }
     }
 
     protected void onDraw(Canvas canvas) {

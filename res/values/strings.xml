@@ -3,4 +3,5 @@
     <string name="app_name">AndroidLaserPointer</string>
     <string name="start_button_text">Begin</string>
     <string name="points_title">Points:</string>
+    <string name="time_title">Time:</string>
 </resources>

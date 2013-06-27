@@ -17,19 +17,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
                 android:textSize="20dp"
                 android:visibility="visible"
-                android:text="0" />
+                android:text="0"  />
 
         <TextView
                 android:id="@+id/points_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@id/points_counter"
                 android:layout_toLeftOf="@id/points_counter"
                 android:textSize="20dp"
                 android:paddingRight="5dp"
                 android:visibility="visible"
-                android:text="@string/points_title" />
+                android:text="@string/points_title"  />
+
+        <TextView
+            android:id="@+id/time_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/points_counter"
+            android:textSize="20dp"
+            android:visibility="visible"
+            android:text="0:00" />
+
+        <TextView
+            android:id="@+id/time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/points_title"
+            android:layout_toLeftOf="@id/time_counter"
+            android:textSize="20dp"
+            android:paddingRight="5dp"
+            android:visibility="visible"
+            android:text="@string/time_title" />
 
     </RelativeLayout>
 

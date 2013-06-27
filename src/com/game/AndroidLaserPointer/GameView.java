@@ -33,13 +33,27 @@ public class GameView extends View {
 
     private long then;
 
-    private RefreshHandler mRedrawHandler = new RefreshHandler();
 
+    private RedrawHandler mRedrawHandler = new RedrawHandler();
 
-    class RefreshHandler extends Handler {
+    class RedrawHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             GameView.this.update();
+        }
+
+        public void sleep(long delayMillis) {
+            this.removeMessages(0);
+            sendMessageDelayed(obtainMessage(0), delayMillis);
+        }
+    };
+
+    private TimerHandler mTimerHandler = new TimerHandler();
+
+    class TimerHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            GameView.this.updateTimer();
         }
 
         public void sleep(long delayMillis) {
@@ -99,6 +113,10 @@ public class GameView extends View {
         invalidate();
 
         mRedrawHandler.sleep(60);
+    }
+
+    public void updateTimer() {
+        mTimerHandler.sleep(1000);
     }
 
     protected void onDraw(Canvas canvas) {

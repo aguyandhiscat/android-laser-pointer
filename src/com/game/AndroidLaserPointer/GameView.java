@@ -40,6 +40,8 @@ public class GameView extends View {
 
     private long then;
 
+    private SerialExecutionInitiator initiator;
+
 
     private RedrawHandler mRedrawHandler = new RedrawHandler();
 
@@ -69,6 +71,50 @@ public class GameView extends View {
         }
     };
 
+
+
+    public interface SerialExecutionListener {
+        void onComplete();
+    }
+
+    class SerialExecutionInitiator {
+        public SerialExecutionListener listener;
+        private boolean onMeasureFired;
+        private boolean onInitGameFired;
+
+        public SerialExecutionInitiator() {
+            onMeasureFired = false;
+            onInitGameFired = false;
+        }
+
+        public void assignListener(SerialExecutionListener listener) {
+            this.listener = listener;
+        }
+
+        public void onMeasured() {
+            onMeasureFired = true;
+            testCompleted();
+        }
+
+        public void onInitGame() {
+            onInitGameFired = true;
+            testCompleted();
+        }
+
+        private void testCompleted() {
+            if(onMeasureFired && onInitGameFired) {
+                fireCompleted();
+            }
+        }
+
+        private void fireCompleted() {
+            listener.onComplete();
+        }
+    }
+
+
+    // Begin constructors
+
     public GameView(Context context) {
         super(context);
 
@@ -90,8 +136,14 @@ public class GameView extends View {
         mLaser = new Laser();
         MAX_X = MAX_Y = 0;
 
-        mLaser.x((int)mLaser.radius).y((int) mLaser.radius);
-        update();
+        initiator = new SerialExecutionInitiator();
+
+        initiator.assignListener(new SerialExecutionListener() {
+            public void onComplete() {
+                randomLocation();
+                update();
+            }
+        });
     }
 
     public void initNewGame() {
@@ -101,6 +153,8 @@ public class GameView extends View {
 
         updatePoints(0);
         updateTimer();
+
+        initiator.onInitGame();
     }
 
     public void endGame(int finalPoints) {
@@ -160,6 +214,8 @@ public class GameView extends View {
         if(!isInEditMode()) {
             MAX_X = MeasureSpec.getSize(widthMeasureSpec);
             MAX_Y = MeasureSpec.getSize(heightMeasureSpec);
+
+            initiator.onMeasured();
         }
     }
 

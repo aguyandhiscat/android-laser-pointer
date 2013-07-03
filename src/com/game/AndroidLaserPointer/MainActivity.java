@@ -9,11 +9,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.*;
 
+import java.util.ArrayList;
+
 public class MainActivity extends Activity {
 
     private static final String TAG = "AndroidLaserPointerGame";
-
-    String[] leadersArray = { "Alex", "Danielle", "Steve" };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,12 @@ public class MainActivity extends Activity {
     public void reset() {
         setContentView(R.layout.menu);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, leadersArray);
+        ArrayList<LeaderboardItem> list = new ArrayList<LeaderboardItem>();
+        list.add(new LeaderboardItem("Alex", "80"));
+        list.add(new LeaderboardItem("Danielle", "100"));
+        list.add(new LeaderboardItem("Steve", "120"));
+
+        LeaderboardListAdapter adapter = new LeaderboardListAdapter(this, list);
 
         ListView leaderBoardView = (ListView) findViewById(R.id.leader_board);
         leaderBoardView.setAdapter(adapter);

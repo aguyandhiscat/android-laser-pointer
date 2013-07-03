@@ -7,13 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 public class MainActivity extends Activity {
 
     private static final String TAG = "AndroidLaserPointerGame";
+
+    String[] leadersArray = { "Alex", "Danielle", "Steve" };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,11 @@ public class MainActivity extends Activity {
 
     public void reset() {
         setContentView(R.layout.menu);
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, leadersArray);
+
+        ListView leaderBoardView = (ListView) findViewById(R.id.leader_board);
+        leaderBoardView.setAdapter(adapter);
 
         Button btn = (Button) findViewById(R.id.start_button);
         btn.setOnClickListener(new View.OnClickListener() {

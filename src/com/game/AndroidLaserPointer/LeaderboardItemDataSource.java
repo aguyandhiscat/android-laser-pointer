@@ -60,6 +60,23 @@ public class LeaderboardItemDataSource {
         return list;
     }
 
+    public List<LeaderboardItem> getTop(int num) {
+        List<LeaderboardItem> list = new ArrayList<LeaderboardItem>();
+
+        Cursor cursor = database.query(false, LeaderboardSqliteHelper.TABLE,
+                allColumns, null, null, null, null, LeaderboardSqliteHelper.C_SCORE + " DESC", ""+num);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            LeaderboardItem comment = toObject(cursor);
+            list.add(comment);
+            cursor.moveToNext();
+        }
+        // Make sure to close the cursor
+        cursor.close();
+        return list;
+    }
+
     private LeaderboardItem toObject(Cursor cursor) {
         LeaderboardItem item = new LeaderboardItem();
         item.setId(cursor.getLong(0));

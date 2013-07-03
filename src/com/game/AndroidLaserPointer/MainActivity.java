@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
     public void reset() {
         setContentView(R.layout.menu);
 
-        List<LeaderboardItem> list = leaderboardItemDataSource.getAll();
+        List<LeaderboardItem> list = leaderboardItemDataSource.getTop(5);
 
         LeaderboardListAdapter adapter = new LeaderboardListAdapter(this, list);
 

@@ -7,15 +7,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class LeaderboardListAdapter extends BaseAdapter {
 
-    private ArrayList listData;
+    private List listData;
 
     private LayoutInflater layoutInflater;
 
-    public LeaderboardListAdapter(Context context, ArrayList listData) {
+    public LeaderboardListAdapter(Context context, List listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(context);
     }
@@ -52,7 +52,7 @@ public class LeaderboardListAdapter extends BaseAdapter {
         }
 
         holder.nameView.setText(((LeaderboardItem) listData.get(position)).getName());
-        holder.scoreView.setText(((LeaderboardItem) listData.get(position)).getScore());
+        holder.scoreView.setText(Integer.toString(((LeaderboardItem) listData.get(position)).getScore()));
 
         return convertView;
     }

@@ -2,12 +2,22 @@ package com.game.AndroidLaserPointer;
 
 public class LeaderboardItem {
 
+    private long id;
     private String name;
-    private String score;
+    private int score;
 
-    public LeaderboardItem(String name, String score) {
-        this.name = name;
-        this.score = score;
+    public LeaderboardItem() {
+        this.id = 0;
+        this.name = "";
+        this.score = 0;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -18,11 +28,11 @@ public class LeaderboardItem {
         this.name = name;
     }
 
-    public String getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(String score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

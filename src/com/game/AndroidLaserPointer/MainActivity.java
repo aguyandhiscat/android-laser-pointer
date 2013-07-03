@@ -9,11 +9,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
     private static final String TAG = "AndroidLaserPointerGame";
+
+    private LeaderboardItemDataSource leaderboardItemDataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,16 +25,16 @@ public class MainActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        leaderboardItemDataSource = new LeaderboardItemDataSource(this);
+        leaderboardItemDataSource.open();
+
         reset();
     }
 
     public void reset() {
         setContentView(R.layout.menu);
 
-        ArrayList<LeaderboardItem> list = new ArrayList<LeaderboardItem>();
-        list.add(new LeaderboardItem("Alex", "80"));
-        list.add(new LeaderboardItem("Danielle", "100"));
-        list.add(new LeaderboardItem("Steve", "120"));
+        List<LeaderboardItem> list = leaderboardItemDataSource.getAll();
 
         LeaderboardListAdapter adapter = new LeaderboardListAdapter(this, list);
 
@@ -59,6 +61,9 @@ public class MainActivity extends Activity {
 
     public void endGame(int finalScore) {
         setScoreInLeaderboard(finalScore);
+
+        leaderboardItemDataSource.create("Charlotte", finalScore);
+
         reset();
     }
 

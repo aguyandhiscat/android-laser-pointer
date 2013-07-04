@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
     private static final String TAG = "AndroidLaserPointerGame";
 
     private LeaderboardItemDataSource leaderboardItemDataSource;
+    private GameView mGameView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,14 +53,16 @@ public class MainActivity extends Activity {
     public void beginGame() {
         setContentView(R.layout.game);
 
-        GameView gameView = (GameView) findViewById(R.id.game);
-        gameView.setDependentViews((TextView) findViewById(R.id.points_counter),
+        mGameView = (GameView) findViewById(R.id.game);
+        mGameView.setDependentViews((TextView) findViewById(R.id.points_counter),
                 (TextView) findViewById(R.id.time_counter));
 
-        gameView.initNewGame();
+        mGameView.initNewGame();
     }
 
     public void endGame(int finalScore) {
+        mGameView.tearDown();
+
         setScoreInLeaderboard(finalScore);
 
         leaderboardItemDataSource.create("Charlotte", finalScore);

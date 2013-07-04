@@ -112,12 +112,12 @@ public class Laser extends ShapeDrawable {
     public void step(long deltaTimeMs) {
         totalTimer += deltaTimeMs;
 
-        if(totalTimer >= 500) {
+        if(totalTimer >= 1500) {
             Log.i(TAG, "Timer: " + totalTimer);
 
             // We hit half a second. Lets randomly move the laser
-            this.animateX(x + ((int) (20*Math.random()-10)));
-            this.animateY(y + ((int) (20*Math.random()-10)));
+            this.animateX(x + ((int) (50*Math.random()-25)));
+            this.animateY(y + ((int) (50*Math.random()-25)));
 
             totalTimer = 0;
         }

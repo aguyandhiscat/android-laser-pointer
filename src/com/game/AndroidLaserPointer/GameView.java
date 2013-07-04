@@ -16,7 +16,7 @@ import java.util.TimeZone;
 
 public class GameView extends View {
     private static final String TAG = "AndroidLaserPointerGame";
-    private final int DefaultTimeMs = 8000;
+    private final int DefaultTimeMs = 80000;
 
     private MainActivity mActivity;
 
@@ -146,6 +146,17 @@ public class GameView extends View {
         });
     }
 
+    public void tearDown() {
+        mLaser = null;
+        initiator = null;
+        MAX_X = MAX_Y = 0;
+        mPoints = 0;
+        mRedrawHandler.removeMessages(0);
+        mTimerHandler.removeMessages(0);
+        mRedrawHandler = null;
+        mTimerHandler = null;
+    }
+
     public void initNewGame() {
         mCountdownTime = Calendar.getInstance(TimeZone.getTimeZone("GMT+0"));
         mCountdownTime.clear();
@@ -194,7 +205,7 @@ public class GameView extends View {
         } else {
             mCountdownTime.add(Calendar.MILLISECOND, -1000);
             int time = (int) mCountdownTime.getTimeInMillis()/1000;
-            mTimeCounter.setText(((time < 10) ? "0" : "") + time);
+            mTimeCounter.setText(""+time);
             mTimerHandler.sleep(1000);
         }
     }

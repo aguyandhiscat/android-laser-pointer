@@ -1,5 +1,6 @@
 package com.game.AndroidLaserPointer;
 
+import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
@@ -15,10 +16,17 @@ public class Laser extends ShapeDrawable {
     private int y;
 
     private float oscillationPeriod;
+    private float totalTimer;
+
+    private ValueAnimator xAnimator;
+    private ValueAnimator yAnimator;
+    private final long animatorDuration = 500;
 
     public Laser() {
         super(new OvalShape());
 
+        x = y = -1;
+        totalTimer = 0f;
         radius = 40f;
         diameter = radius*2;
         oscillationPeriod = (float) Math.PI/32;
@@ -29,7 +37,7 @@ public class Laser extends ShapeDrawable {
         super.draw(canvas);
     }
 
-    public Laser x(int x) {
+    public Laser directX(int x) {
         this.x = x;
         reBounds();
 
@@ -38,13 +46,55 @@ public class Laser extends ShapeDrawable {
         return this;
     }
 
-    public Laser y(int y) {
+    public Laser animateX(int x) {
+        if(this.x < 0) {
+            return directX(x);
+        } else {
+            xAnimator = ValueAnimator.ofInt(this.x, x);
+            xAnimator.setDuration(animatorDuration);
+            xAnimator.setRepeatCount(0);
+            xAnimator.start();
+
+            xAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    if(animation.isRunning()) {
+                        directX(((Integer) animation.getAnimatedValue()).intValue());
+                    }
+                }
+            });
+
+            return this;
+        }
+    }
+
+    public Laser directY(int y) {
         this.y = y;
         reBounds();
 
         Log.i(TAG, "Ly: "+this.y);
 
         return this;
+    }
+
+    public Laser animateY(int y) {
+        if(this.y < 0) {
+            return directY(y);
+        } else {
+            yAnimator = ValueAnimator.ofInt(this.y, y);
+            yAnimator.setDuration(animatorDuration);
+            yAnimator.setRepeatCount(0);
+            yAnimator.start();
+
+            yAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    if(animation.isRunning()) {
+                        directY(((Integer) animation.getAnimatedValue()).intValue());
+                    }
+                }
+            });
+
+            return this;
+        }
     }
 
     public Laser r(float r) {
@@ -60,8 +110,21 @@ public class Laser extends ShapeDrawable {
     }
 
     public void step(long deltaTimeMs) {
+        totalTimer += deltaTimeMs;
+
+        if(totalTimer >= 500) {
+            Log.i(TAG, "Timer: " + totalTimer);
+
+            // We hit half a second. Lets randomly move the laser
+            this.animateX(x + ((int) (20*Math.random()-10)));
+            this.animateY(y + ((int) (20*Math.random()-10)));
+
+            totalTimer = 0;
+        }
+
 //        float t = oscillationPeriod/(deltaTimeMs*1000);
 //        this.r((float)(radius + 3*Math.sin(t)));
+
     }
 
     public boolean hit(int x, int y) {

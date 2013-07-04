@@ -220,8 +220,8 @@ public class GameView extends View {
     }
 
     public void randomLocation() {
-        mLaser.x((int) (mLaser.radius + Math.random()*(MAX_X-mLaser.diameter)));
-        mLaser.y((int) (mLaser.radius + Math.random()*(MAX_Y-mLaser.diameter)));
+        mLaser.animateX((int) (mLaser.radius + Math.random()*(MAX_X-mLaser.diameter)));
+        mLaser.animateY((int) (mLaser.radius + Math.random()*(MAX_Y-mLaser.diameter)));
     }
 
     private void laserHit() {
